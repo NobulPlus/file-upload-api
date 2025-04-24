@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\UploadService;
-use App\Models\UploadSession; // Add this import
+use App\Models\UploadSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
