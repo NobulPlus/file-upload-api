@@ -8,13 +8,17 @@ class UploadSession extends Model
 {
     protected $fillable = ['token', 'user_id', 'email_to_notify', 'expires_at', 'password', 'download_count'];
 
+    protected $casts = [
+        'expires_at' => 'datetime',
+    ];
+
     public function files()
     {
-        return $this->hasMany(UploadFile::class);
+        return $this->hasMany(UploadFile::class, 'upload_session_id');
     }
 
-    public function isExpired()
+    public function user()
     {
-        return now()->greaterThan($this->expires_at);
+        return $this->belongsTo(User::class);
     }
 }

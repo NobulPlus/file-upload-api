@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\UploadService;
+use App\Models\UploadSession; // Add this import
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -27,8 +28,8 @@ class UploadController extends Controller
         try {
             Log::info('Starting validation');
             $request->validate([
-                'files' => 'required', // Accept single file or array
-                'files.*' => 'file|max:10240', // Validate each file
+                'files' => 'required',
+                'files.*' => 'file|max:10240',
                 'expires_in' => 'required|integer|min:1|max:7',
                 'email_to_notify' => 'nullable|email',
                 'password' => 'nullable|string|min:6',
@@ -40,7 +41,6 @@ class UploadController extends Controller
         }
 
         $files = $request->file('files');
-        // Ensure $files is always an array
         $files = is_array($files) ? $files : [$files];
         Log::info('Files retrieved', ['file_count' => count($files)]);
 
@@ -66,6 +66,8 @@ class UploadController extends Controller
 
     public function stats($token)
     {
+        Log::info('UploadController::stats started', ['token' => $token]);
+
         $session = UploadSession::where('token', $token)->firstOrFail();
 
         return response()->json([

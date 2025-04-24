@@ -23,7 +23,11 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['token' => $user->createToken('api')->plainTextToken]);
+        return response()->json([
+            'name' => $user->name,
+            'email' => $user->email,
+            'token' => $user->createToken('api')->plainTextToken,
+        ], 201);
     }
 
     public function login(Request $request)
@@ -39,6 +43,10 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        return response()->json(['token' => $user->createToken('api')->plainTextToken]);
+        return response()->json([
+            'name' => $user->name,
+            'email' => $user->email,
+            'token' => $user->createToken('api')->plainTextToken,
+        ]);
     }
 }
